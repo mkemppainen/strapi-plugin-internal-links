@@ -47,8 +47,6 @@ export const PageSearch = ({ uid, selectedId, platformTitle, pluginConfig, onCha
 	const fetchClient = useFetchClient();
 	const form = useCMEditViewDataManager() as any;
 
-	console.log(pluginConfig?.pageSearchOptions);
-
 	const {
 		data: entityFromId,
 		isLoading: isLoadingEntity,
