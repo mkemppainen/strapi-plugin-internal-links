@@ -40,6 +40,10 @@ export default ({ env }) => {
 				pathField: 'undefined | string',
 				platformUid: 'undefined |string'
 			},
+			pageSearchOptions: {
+				searchableFields: string[], // Determines what fields are searchable, default: ['title']
+				subTitlePath: string // When set, a subtitle will be shown in the options, default: undefined
+			}
 			domains: {
 				default: {
 					test: 'https://webbio.nl',
@@ -62,7 +66,11 @@ Add the custom field with the content-type builder or directly to the JSON.
 	"options": {
 		"title": "title", // uses this field to show the targeted entity's title (defaults to 'title')
 		"slug": "slug", // uses this field to link to the targeted entity (defaults to 'path' for pagebuilder options. 	otherwise will default to 'fullPath')
-		"noTitle": boolean // enable this to hide the title field
+		"noTitle": boolean, // enable this to hide the title field
+		"pageSearchOptions": {
+			"searchableFields": string[],
+			"subTitlePath": string
+		}
 	},
 }
 // ...

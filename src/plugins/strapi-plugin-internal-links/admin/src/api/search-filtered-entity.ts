@@ -1,5 +1,7 @@
 import { useQuery, UseQueryOptions } from 'react-query';
-import orderBy from 'lodash/orderBy';
+import objGet from 'lodash/get';
+import qs from 'qs';
+import Fuse from 'fuse.js';
 
 import { useFetchClient } from '@strapi/helper-plugin';
 import { GlobalPluginConfig } from '../../../utils/config.types';
@@ -16,11 +18,12 @@ export type SearchFilteredEntitiesResult = {
 		id: number;
 		title: string;
 		href: string;
-		publicationState?: string;
+		publicationState?: string | false;
 		publishedAt?: string;
 		path: string;
 		platform?: { domain?: string };
 		locale?: string;
+		subTitle?: string;
 	}[];
 };
 
@@ -32,7 +35,10 @@ type SearchFilteredEntitiesQueryParams = {
 	searchQuery?: string;
 	platformTitle?: string;
 	notIds?: number[];
-	pageBuilderConfig?: GlobalPluginConfig['pageBuilder'];
+	pluginConfig?: GlobalPluginConfig;
+	searchableFields?: string[];
+	subTitlePath?: string;
+	mainFieldName?: string;
 };
 
 const QUERY_KEY = 'filteredEntities';
@@ -45,7 +51,10 @@ export const getSearchFilteredEntities = async ({
 	searchQuery,
 	platformTitle,
 	notIds,
-	pageBuilderConfig
+	pluginConfig,
+	searchableFields = ['title'],
+	subTitlePath,
+	mainFieldName = 'title'
 }: SearchFilteredEntitiesQueryParams): Promise<SearchFilteredEntitiesResult> => {
 	try {
 		if (!uid) {
@@ -53,52 +62,75 @@ export const getSearchFilteredEntities = async ({
 		}
 
 		const { get } = fetchClient;
-		const searchParams = new URLSearchParams();
-		searchParams.append('page', String(page));
-		searchParams.append('pageSize', '999');
+		const notIdFilters = notIds && notIds.length > 0 ? notIds.map((id) => ({ id: { $ne: id } })) : [];
 
-		if (locale) {
-			searchParams.append('locale', locale);
-		}
+		const fieldFilters = searchableFields.map((field) => ({ [field]: { $containsi: searchQuery } }));
+
+		const filters = qs.stringify({
+			page,
+			pageSize: 20,
+			locale,
+			// _q is a fuzzy search with sometimes unexpected results
+			// _q: searchQuery || undefined,
+			filters: {
+				$and: [
+					platformTitle && { platform: { title: { $eq: platformTitle || undefined } } },
+					{
+						$or: fieldFilters
+					},
+					...notIdFilters
+				].filter(Boolean)
+			}
+		});
+
+		const { data } = await get(`/content-manager/collection-types/${uid}?${filters}`);
+
+		let results = data.results;
 
 		if (searchQuery) {
-			searchParams.delete('sort');
-			searchParams.append('sort', 'title:ASC');
-			searchParams.append('_q', searchQuery);
-		}
+			const fuse = new Fuse(data.results, {
+				keys: searchableFields
+			});
 
-		if (platformTitle) {
-			searchParams.append('filters[$and][0][platform][title][$contains]', String(platformTitle));
-		}
+			const fuseSearch = fuse.search(searchQuery);
 
-		if (notIds && notIds.length > 0) {
-			for (let index = 0; index < notIds.length; index++) {
-				const id = notIds[index];
-				searchParams.append(`filters[$and][${index + 1}][id][$ne]`, String(id));
+			if (fuseSearch && fuseSearch.length > 0) {
+				results = fuseSearch.map((r) => r.item);
 			}
 		}
 
-		const { data } = await get(`/content-manager/collection-types/${uid}?${searchParams.toString()}`);
-		const pathField = pageBuilderConfig?.pathField || DEFAULT_PAGEBUILDER_PATH_FIELD;
+		const pathField = pluginConfig?.pageBuilder?.pathField || DEFAULT_PAGEBUILDER_PATH_FIELD;
 
-		const mapResults = data.results.map(
-			(result: Record<string, any>): SearchFilteredEntitiesResult['results'][number] => ({
+		const mapResults = results.map((result: Record<string, any>): SearchFilteredEntitiesResult['results'][number] => {
+			const getPublicationState = () => {
+				if (result?.publishedAt !== undefined) {
+					return result?.publishedAt ? 'published' : 'draft';
+				}
+
+				return false;
+			};
+
+			const subTitle = subTitlePath ? objGet(result, subTitlePath) : undefined;
+
+			return {
 				id: result.id,
-				title: result.title,
-				publicationState: result?.publishedAt ? 'published' : 'draft',
+				title: result?.[mainFieldName],
+				publicationState: getPublicationState(),
 				publishedAt: result?.publishedAt,
 				href: `/content-manager/collectionType/${uid}/${result.id}`,
 				path: result?.[pathField] === '/' ? '' : result?.[pathField] || '',
 				platform: result?.platform,
-				locale: result?.locale
-			})
-		);
+				locale: result?.locale,
+				subTitle: typeof subTitle === 'string' || typeof subTitle === 'number' ? String(subTitle) : ''
+			};
+		});
 
 		return {
 			pagination: data.pagination,
-			results: orderBy(mapResults, ['title'], ['asc'])
+			results: mapResults
 		};
 	} catch (e) {
+		console.error(e);
 		return {
 			pagination: { page: 1, pageCount: 0, pageSize: 0, total: 0 },
 			results: []

@@ -375,7 +375,8 @@ const InternalLinkForm = ({
 					uid={contentType?.uid}
 					platformTitle={pageBuilderEnabled ? platform?.label : undefined}
 					onChange={(value) => onPageChange(value?.id, value?.path, value?.platform?.domain)}
-					pageBuilderConfig={pluginConfig?.pageBuilder}
+					pluginConfig={pluginConfig}
+					attributeOptions={attributeOptions}
 				/>
 			)}
 

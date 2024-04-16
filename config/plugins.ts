@@ -11,6 +11,10 @@ export default ({ env }) => {
 				pageBuilder: {
 					enabled: true
 				},
+				pageSearchOptions: {
+					subTitlePath: 'path',
+					searchableFields: ['title', 'path']
+				},
 				domains: {
 					default: {
 						test: 'https://webbio.nl',
