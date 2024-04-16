@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import debounce from 'lodash/debounce';
+import objGet from 'lodash/get';
 import { OptionProps, SingleValue, components } from 'react-select';
 import { useCMEditViewDataManager, useFetchClient } from '@strapi/helper-plugin';
 import { Flex, FieldLabel } from '@strapi/design-system';
@@ -16,6 +17,7 @@ import { Label } from '../../label';
 import { useGetStrapiLocales } from '../../../utils/use-get-strapi-locales';
 
 import S from './styles';
+import { IInternalLinkAttribute } from '../..';
 
 const SEARCH_DEBOUNCE_MS = 150;
 const PAGE = 1;
@@ -23,22 +25,24 @@ const PAGE = 1;
 export interface PageReactSelectValue extends Omit<IReactSelectValue, 'initialSelected'> {
 	id: number;
 	href?: string;
-	publicationState?: string;
+	publicationState?: string | false;
 	publishedAt?: string;
 	path: string;
 	locale: string;
 	platform?: { domain?: string };
+	subTitle?: string;
 }
 
 interface Props {
 	selectedId?: number;
 	uid?: string;
 	platformTitle?: string;
-	pageBuilderConfig?: GlobalPluginConfig['pageBuilder'];
+	pluginConfig?: GlobalPluginConfig;
 	onChange: (item?: SingleValue<PageReactSelectValue>) => void;
+	attributeOptions?: IInternalLinkAttribute['options'];
 }
 
-export const PageSearch = ({ uid, selectedId, platformTitle, pageBuilderConfig, onChange }: Props) => {
+export const PageSearch = ({ uid, selectedId, platformTitle, pluginConfig, onChange, attributeOptions }: Props) => {
 	const { formatMessage } = useIntl();
 	const fetchClient = useFetchClient();
 	const form = useCMEditViewDataManager() as any;
@@ -50,12 +54,17 @@ export const PageSearch = ({ uid, selectedId, platformTitle, pageBuilderConfig, 
 	} = useGetEntity({
 		uid,
 		id: selectedId,
-		pageBuilderConfig
+		pageBuilderConfig: pluginConfig?.pageBuilder
 	});
 
 	const { defaultLocale } = useGetStrapiLocales();
 	const urlLocale = useGetLocaleFromUrl();
 	const [selectedLocale, setSelectedLocale] = React.useState<string | undefined>();
+
+	const searchableFields =
+		attributeOptions?.pageSearchOptions?.searchableFields || pluginConfig?.pageSearchOptions?.searchableFields;
+	const subTitlePath =
+		attributeOptions?.pageSearchOptions?.subTitlePath || pluginConfig?.pageSearchOptions?.subTitlePath;
 
 	useEffect(() => {
 		if (!selectedLocale && !isLoadingEntity && (dataUpdatedAt || !selectedId)) {
@@ -63,7 +72,7 @@ export const PageSearch = ({ uid, selectedId, platformTitle, pageBuilderConfig, 
 		}
 	}, [entityFromId, defaultLocale]);
 
-	const selectedPageFromId = mapSelectItem(entityFromId);
+	const selectedPageFromId = mapSelectItem(entityFromId, subTitlePath);
 
 	const isPagePageType = !uid;
 
@@ -79,7 +88,9 @@ export const PageSearch = ({ uid, selectedId, platformTitle, pageBuilderConfig, 
 			uid,
 			searchQuery: inputValue,
 			platformTitle,
-			pageBuilderConfig
+			pluginConfig,
+			searchableFields,
+			subTitlePath
 		});
 
 		return searchEntities.results.map((x) => ({
@@ -91,7 +102,8 @@ export const PageSearch = ({ uid, selectedId, platformTitle, pageBuilderConfig, 
 			publishedAt: x.publishedAt,
 			path: x.path,
 			platform: x.platform,
-			locale: x.locale || ''
+			locale: x.locale || '',
+			subTitle: x.subTitle
 		}));
 	};
 
@@ -156,14 +168,21 @@ const CustomOption = (props: OptionProps<PageReactSelectValue, false>) => {
 	return (
 		<components.Option {...props}>
 			<S.CustomOption>
-				<S.CustomOptionStatus publicationState={props.data?.publicationState} />
-				{props.children}
+				{props.data?.publicationState && <S.CustomOptionStatus publicationState={props.data?.publicationState} />}
+
+				<Flex direction="column" alignItems="start" gap={0}>
+					{props.children}
+					{props.data?.subTitle && <S.CustomOptionSubTitle>{props.data?.subTitle}</S.CustomOptionSubTitle>}
+				</Flex>
 			</S.CustomOption>
 		</components.Option>
 	);
 };
 
-function mapSelectItem(initialValue?: Record<string, any>): SingleValue<PageReactSelectValue | null> {
+function mapSelectItem(
+	initialValue?: Record<string, any>,
+	subTitlePath?: string
+): SingleValue<PageReactSelectValue | null> {
 	return initialValue?.id
 		? {
 				id: initialValue.id,
@@ -174,7 +193,8 @@ function mapSelectItem(initialValue?: Record<string, any>): SingleValue<PageReac
 				publishedAt: initialValue.publishedAt,
 				platform: initialValue.platform,
 				path: initialValue.path || '',
-				locale: initialValue.locale || ''
+				locale: initialValue.locale || '',
+				subTitle: subTitlePath ? objGet(initialValue, subTitlePath) : ''
 		  }
 		: null;
 }

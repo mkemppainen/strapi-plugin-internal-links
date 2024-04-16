@@ -11,4 +11,8 @@ export interface GlobalPluginConfig {
 		platformUid?: string;
 	};
 	domains?: Record<string, any>;
+	pageSearchOptions?: {
+		searchableFields?: string[];
+		subTitlePath?: string;
+	};
 }

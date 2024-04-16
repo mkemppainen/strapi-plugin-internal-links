@@ -33,6 +33,10 @@ export interface IInternalLinkAttribute {
 		slug?: string;
 		'link-regex'?: string;
 		noTitle?: boolean;
+		pageSearchOptions?: {
+			searchableFields?: string[];
+			subTitlePath?: string;
+		};
 	};
 }
 
