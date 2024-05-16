@@ -11,6 +11,10 @@ export default ({ env }) => {
 				pageBuilder: {
 					enabled: true
 				},
+				externalSource: {
+					enabled: true,
+					apiPath: 'http://localhost:3000'
+				},
 				pageSearchOptions: {
 					subTitlePath: 'path',
 					searchableFields: ['title', 'path']

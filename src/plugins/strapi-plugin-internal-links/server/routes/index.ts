@@ -4,6 +4,14 @@ export default {
 		routes: [
 			{
 				method: 'GET',
+				path: '/source',
+				handler: 'external-source.find',
+				config: {
+					policies: []
+				}
+			},
+			{
+				method: 'GET',
 				path: '/config',
 				handler: 'config.find',
 				config: {
@@ -14,7 +22,9 @@ export default {
 				method: 'GET',
 				path: '/content-types',
 				handler: 'content-type.find',
+				auth: false,
 				config: {
+					auth: false,
 					policies: []
 				}
 			},

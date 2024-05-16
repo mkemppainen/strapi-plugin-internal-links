@@ -47,6 +47,9 @@
 		},
 		"urlAddition": {
 			"type": "string"
+		},
+		"externalSourceValue": {
+			"type": "string"
 		}
 	}
 }

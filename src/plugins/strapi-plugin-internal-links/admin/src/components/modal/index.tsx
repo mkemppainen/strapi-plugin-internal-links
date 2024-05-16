@@ -46,7 +46,8 @@ const InternalLinkModal = ({
 	const hasErrors = Object.values(errors).some((item) => !!item);
 	const isFilled =
 		(link.type === 'external' && shouldShowTitle ? !!link.text : true && !!link.url) ||
-		(link.type === 'internal' && !!link.targetContentTypeUid && !!link.targetContentTypeId);
+		(link.type === 'internal' && !!link.targetContentTypeUid && !!link.targetContentTypeId) ||
+		(link.type === 'source' && !!link.externalSourceValue);
 
 	const spacing = 4;
 	const colors = {

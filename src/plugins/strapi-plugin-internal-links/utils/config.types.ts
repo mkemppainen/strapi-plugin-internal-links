@@ -4,6 +4,10 @@ export interface GlobalPluginConfig {
 	noUrlValidation?: boolean;
 	defaultNoTitle?: boolean;
 	enableUrlAddition: boolean;
+	externalSource?: {
+		enabled: boolean;
+		apiPath: string;
+	};
 	pageBuilder?: {
 		enabled?: boolean; // When enabled, pageBuilder plugin logic is applied.
 		pageUid?: string;

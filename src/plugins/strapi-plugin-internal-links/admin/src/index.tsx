@@ -59,6 +59,19 @@ export default {
 							},
 							{
 								intlLabel: {
+									id: getTrad('internal-link.options.source.options'),
+									defaultMessage: 'Slug'
+								},
+								name: 'options.externalApi',
+								description: {
+									id: getTrad('internal-link.options.source.options.description'),
+									defaultMessage: 'Select the name of the slug field'
+								},
+								type: 'text',
+								defaultValue: ''
+							},
+							{
+								intlLabel: {
 									id: getTrad('internal-link.options.base.slug'),
 									defaultMessage: 'Slug'
 								},

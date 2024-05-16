@@ -1,6 +1,7 @@
 export const INTERNAL_LINK_TYPE = {
 	INTERNAL: 'internal',
-	EXTERNAL: 'external'
+	EXTERNAL: 'external',
+	SOURCE: 'source'
 } as const;
 
 export interface IInternalLink {
@@ -15,6 +16,7 @@ export interface IInternalLink {
 	type: (typeof INTERNAL_LINK_TYPE)[keyof typeof INTERNAL_LINK_TYPE];
 	domain?: string;
 	urlAddition?: string;
+	externalSourceValue?: string;
 }
 
 export const createInternalLink = (
