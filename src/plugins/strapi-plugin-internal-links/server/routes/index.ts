@@ -4,14 +4,6 @@ export default {
 		routes: [
 			{
 				method: 'GET',
-				path: '/source',
-				handler: 'external-source.find',
-				config: {
-					policies: []
-				}
-			},
-			{
-				method: 'GET',
 				path: '/config',
 				handler: 'config.find',
 				config: {
@@ -64,6 +56,14 @@ export default {
 				method: 'GET',
 				path: '/:id',
 				handler: 'internal-link.findOne',
+				config: {
+					policies: []
+				}
+			},
+			{
+				method: 'POST',
+				path: '/source',
+				handler: 'external-source.find',
 				config: {
 					policies: []
 				}

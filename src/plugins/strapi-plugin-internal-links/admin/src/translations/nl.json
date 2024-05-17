@@ -15,6 +15,15 @@
 	"internal-link.errors.remaining-links": "Er zijn nog gekoppelde pagina's",
 	"internal-link.options.base.noTitle": "Schakel de link tekst uit",
 	"internal-link.options.base.noTitle.description": "Zet deze optie aan om de link tekst uit te schakelen",
+
+
+	"internal-link.options.source.label.mapping": "Label van API",
+	"internal-link.options.source.label.mapping.description": "Selecteer hoe de API het label teruggeeft",
+
+	"internal-link.options.source.value.mapping": "Value van API",
+	"internal-link.options.source.value.mapping.description": "Selecteer hoe de API de value teruggeeft",
+
+
 	"internal-link.modal.title": "Link toevoegen",
 	"internal-link.modal.buttons.cancel": "Annuleren",
 	"internal-link.modal.buttons.submit": "Opslaan",

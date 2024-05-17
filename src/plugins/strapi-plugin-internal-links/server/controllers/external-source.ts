@@ -1,6 +1,5 @@
 const find = async (ctx) => {
-	console.log(ctx);
-	return strapi.service('plugin::internal-links.external-source').getExternalSourceData({});
+	return strapi.service('plugin::internal-links.external-source').getExternalSourceData(ctx.request.body.data);
 };
 
 export default {

@@ -4,10 +4,19 @@ export type externalApiResult = {
 	data: any[];
 };
 
-export const fetchSource = async ({ fetchClient }: Record<string, any>): Promise<externalApiResult | undefined> => {
+export const fetchSource = async (
+	{ fetchClient }: Record<string, any>,
+	externalApiUrl?: string,
+	inputValue?: string
+): Promise<externalApiResult | undefined> => {
 	try {
-		const { get } = fetchClient;
-		const result = await get(getRequestUrl('source'));
+		const { post } = fetchClient;
+		const result = await post(getRequestUrl('source'), {
+			data: {
+				url: externalApiUrl,
+				searchQuery: inputValue
+			}
+		});
 
 		return result;
 	} catch {

@@ -1,6 +1,5 @@
 import React, { useState, useLayoutEffect, useEffect, ChangeEvent } from 'react';
 import * as yup from 'yup';
-import debounce from 'lodash/debounce';
 import { useIntl } from 'react-intl';
 import { ReactSelect } from '@strapi/helper-plugin';
 import {
@@ -51,7 +50,7 @@ const InternalLinkForm = ({
 	const useSinglePageType = !!pluginConfig?.useSinglePageType || pluginConfig?.pageBuilder?.enabled;
 	const noUrlValidation = pluginConfig?.noUrlValidation;
 	const pageBuilderEnabled = pluginConfig?.pageBuilder?.enabled;
-	const externalSource = pluginConfig?.externalSource?.enabled;
+	const externalSource = attributeOptions?.enableExternalApi;
 
 	// More information including tests: https://regexr.com/7p9qh
 	const defaultUrlRegex = new RegExp(
@@ -78,6 +77,16 @@ const InternalLinkForm = ({
 			setContentTypeUid(pluginConfig.pageBuilder?.pageUid || pluginConfig.useSinglePageType);
 		}
 	}, [pluginConfig]);
+
+	const checkTab = () => {
+		if (isExternalTab) {
+			return 1;
+		} else if (isSourceTab) {
+			return 2;
+		} else {
+			return 0;
+		}
+	};
 
 	const onContentTypeChange = (value: IContentTypeOption) => {
 		setPageId(undefined);
@@ -303,7 +312,12 @@ const InternalLinkForm = ({
 
 	return (
 		<Stack spacing={6}>
-			<TabGroup label="Some stuff for the label" id="tabs" onTabChange={(selected: number) => tabChange(selected)}>
+			<TabGroup
+				label="Some stuff for the label"
+				id="tabs"
+				onTabChange={(selected: number) => tabChange(selected)}
+				initialSelectedTabIndex={checkTab}
+			>
 				<Tabs>
 					<Tab>Internal</Tab>
 					<Tab>External</Tab>
@@ -505,6 +519,9 @@ const InternalLinkForm = ({
 							)}
 							<Box paddingTop={4}>
 								<ExternalSourceSearch
+									externalApiValueMapping={attributeOptions?.externalApiValueMapping}
+									externalApiLabelMapping={attributeOptions?.externalApiLabelMapping}
+									externalApiUrl={attributeOptions?.externalApi}
 									selectedValue={link.externalSourceValue}
 									onChange={(value) => onSourceChange(value)}
 								/>

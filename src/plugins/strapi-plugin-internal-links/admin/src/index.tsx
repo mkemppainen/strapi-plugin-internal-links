@@ -59,19 +59,6 @@ export default {
 							},
 							{
 								intlLabel: {
-									id: getTrad('internal-link.options.source.options'),
-									defaultMessage: 'Slug'
-								},
-								name: 'options.externalApi',
-								description: {
-									id: getTrad('internal-link.options.source.options.description'),
-									defaultMessage: 'Select the name of the slug field'
-								},
-								type: 'text',
-								defaultValue: ''
-							},
-							{
-								intlLabel: {
 									id: getTrad('internal-link.options.base.slug'),
 									defaultMessage: 'Slug'
 								},
@@ -95,6 +82,58 @@ export default {
 								},
 								type: 'checkbox',
 								defaultValue: false
+							},
+							{
+								intlLabel: {
+									id: getTrad('internal-link.options.externalApi.enable'),
+									defaultMessage: 'Enable external API source'
+								},
+								name: 'options.enableExternalApi',
+								description: {
+									id: getTrad('internal-link.options.externalApi.enable.description'),
+									defaultMessage: 'Enable this to connect with an external API'
+								},
+								type: 'checkbox',
+								defaultValue: false
+							},
+							{
+								intlLabel: {
+									id: getTrad('internal-link.options.source.options'),
+									defaultMessage: 'External API Source'
+								},
+								name: 'options.externalApi',
+								description: {
+									id: getTrad('internal-link.options.source.options.description'),
+									defaultMessage: 'Select the name of the slug field'
+								},
+								type: 'text',
+								defaultValue: ''
+							},
+							{
+								intlLabel: {
+									id: getTrad('internal-link.options.source.label.mapping'),
+									defaultMessage: 'Label from API'
+								},
+								name: 'options.externalApiLabelMapping',
+								description: {
+									id: getTrad('internal-link.options.source.label.mapping.description'),
+									defaultMessage: 'Select the label to be mapped from the API'
+								},
+								type: 'text',
+								defaultValue: ''
+							},
+							{
+								intlLabel: {
+									id: getTrad('internal-link.options.source.value.mapping'),
+									defaultMessage: 'Value from API'
+								},
+								name: 'options.externalApiValueMapping',
+								description: {
+									id: getTrad('internal-link.options.source.value.mapping.description'),
+									defaultMessage: 'Select the value to be mapped from the API'
+								},
+								type: 'text',
+								defaultValue: ''
 							}
 						]
 					}

@@ -12,29 +12,34 @@ const SEARCH_DEBOUNCE_MS = 150;
 
 interface Props {
 	selectedValue?: string;
+	externalApiUrl?: string;
+	externalApiValueMapping?: string;
+	externalApiLabelMapping?: string;
 	onChange: (item?: any) => void;
 }
 
-export const ExternalSourceSearch = ({ onChange, selectedValue }: Props) => {
+export const ExternalSourceSearch = ({
+	onChange,
+	selectedValue,
+	externalApiUrl,
+	externalApiLabelMapping,
+	externalApiValueMapping
+}: Props) => {
 	const { formatMessage } = useIntl();
 	const fetchClient = useFetchClient();
 
-	console.log(selectedValue);
-	const nuValue = { id: 1, value: selectedValue, label: selectedValue };
+	const mappedSelectedValue = mapSelectItem(selectedValue);
 
-	const vowValue = mapSelectItem(selectedValue);
-
-	const getItems = async (): Promise<IReactSelectValue[]> => {
-		// TODO: Mooi maken
-		const externalItems = await fetchSource({ fetchClient });
-		if (!externalItems) {
+	const getItems = async (inputValue?: string): Promise<IReactSelectValue[]> => {
+		const externalItems = await fetchSource({ fetchClient }, externalApiUrl, inputValue);
+		if (!externalItems || !externalApiLabelMapping || !externalApiValueMapping) {
 			return [];
 		}
 
 		const mappedData = externalItems.data.map((item: any) => ({
 			id: item.id,
-			value: item.startPointReference,
-			label: item.question
+			value: item[externalApiValueMapping],
+			label: item[externalApiLabelMapping]
 		}));
 
 		return mappedData;
@@ -48,9 +53,9 @@ export const ExternalSourceSearch = ({ onChange, selectedValue }: Props) => {
 		});
 	}, SEARCH_DEBOUNCE_MS);
 
-	const promiseOptions = (inputValue: string): Promise<any[]> =>
-		new Promise<any[]>((resolve) => {
-			resolve(getItems());
+	const promiseOptions = (inputValue: string): Promise<IReactSelectValue[]> =>
+		new Promise<IReactSelectValue[]>((resolve) => {
+			resolve(getItems(inputValue));
 		});
 
 	return (
@@ -70,7 +75,7 @@ export const ExternalSourceSearch = ({ onChange, selectedValue }: Props) => {
 					cacheOptions
 					// @ts-ignore onChange is correct
 					onChange={handleChange}
-					value={vowValue}
+					value={mappedSelectedValue}
 					placeholder={formatMessage({
 						id: getTrad('internal-link.form.source.placeholder')
 					})}

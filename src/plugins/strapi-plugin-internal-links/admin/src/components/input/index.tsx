@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState, lazy, Suspense } from 'react';
+import { useLayoutEffect, useState, lazy, Suspense } from 'react';
 import { useIntl, MessageDescriptor, IntlFormatters } from 'react-intl';
 
 import { useCMEditViewDataManager } from '@strapi/helper-plugin';
@@ -33,6 +33,10 @@ export interface IInternalLinkAttribute {
 		slug?: string;
 		'link-regex'?: string;
 		noTitle?: boolean;
+		enableExternalApi?: boolean;
+		externalApiLabelMapping?: string;
+		externalApiValueMapping?: string;
+		externalApi?: string;
 		pageSearchOptions?: {
 			searchableFields?: string[];
 			subTitlePath?: string;
