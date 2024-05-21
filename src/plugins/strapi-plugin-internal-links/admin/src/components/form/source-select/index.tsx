@@ -37,7 +37,6 @@ export const ExternalApiSearch = ({
 		}
 
 		const mappedData = externalItems.data.map((item: any) => ({
-			id: item.id,
 			value: item[externalApiValueMapping],
 			label: item[externalApiLabelMapping]
 		}));
