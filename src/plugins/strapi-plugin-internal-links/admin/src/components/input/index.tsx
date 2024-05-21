@@ -33,10 +33,12 @@ export interface IInternalLinkAttribute {
 		slug?: string;
 		'link-regex'?: string;
 		noTitle?: boolean;
-		enableExternalApi?: boolean;
-		externalApiLabelMapping?: string;
-		externalApiValueMapping?: string;
-		externalApi?: string;
+		externalApi?: {
+			enabled?: boolean;
+			labelPath?: string;
+			valuePath?: string;
+			apiUrl?: string;
+		};
 		pageSearchOptions?: {
 			searchableFields?: string[];
 			subTitlePath?: string;

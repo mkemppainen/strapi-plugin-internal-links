@@ -66,14 +66,6 @@
 					"localized": true
 				}
 			},
-			"options": {
-				"noTitle": true,
-				"enableExternalApi": false,
-				"slug": "",
-				"externalApi": "",
-				"externalApiLabelMapping": "",
-				"externalApiValueMapping": ""
-			},
 			"type": "customField",
 			"customField": "plugin::internal-links.internal-link"
 		},

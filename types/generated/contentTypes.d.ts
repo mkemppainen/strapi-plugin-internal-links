@@ -642,17 +642,7 @@ export interface ApiPagePage extends Schema.CollectionType {
 				};
 			}>;
 		link: Attribute.JSON &
-			Attribute.CustomField<
-				'plugin::internal-links.internal-link',
-				{
-					noTitle: true;
-					enableExternalApi: false;
-					slug: '';
-					externalApi: '';
-					externalApiLabelMapping: '';
-					externalApiValueMapping: '';
-				}
-			> &
+			Attribute.CustomField<'plugin::internal-links.internal-link'> &
 			Attribute.SetPluginOptions<{
 				i18n: {
 					localized: true;

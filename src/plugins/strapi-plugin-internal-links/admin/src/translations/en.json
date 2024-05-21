@@ -21,6 +21,7 @@
 	"internal-link.options.base.noTitle.description": "Enable this to hide the link text field",
 	"internal-link.options.externalApi.enable": "Enable External API source",
 	"internal-link.options.externalApi.enable.description": "Enable this to connect with an external API",
+	"internal-link.options.source.apiUrl.error": "Setup a Valid url in de internal link settings",
 	"internal-link.modal.title": "Add link",
 	"internal-link.modal.buttons.cancel": "Cancel",
 	"internal-link.modal.buttons.submit": "Add link",
@@ -57,5 +58,8 @@
 	"internal-link.form.alert.title": "The URL you're about to edit is generated",
 	"internal-link.form.alert.description": "The above URL is linked to an internal page within Strapi. This data needs to be reset in order to add an external URL.",
 	"internal-link.form.alert.button": "Reset data",
-	"internal-link.form.alert.close": "Close"
+	"internal-link.form.alert.close": "Close",
+	"internal-link.tab.internal.label": "Internal",
+	"internal-link.tab.external.label": "External",
+	"internal-link.tab.source.label": "External API"
 }

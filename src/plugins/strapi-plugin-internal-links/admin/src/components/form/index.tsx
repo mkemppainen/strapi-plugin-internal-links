@@ -1,36 +1,20 @@
 import React, { useState, useLayoutEffect, useEffect, ChangeEvent } from 'react';
 import * as yup from 'yup';
 import { useIntl } from 'react-intl';
-import { ReactSelect } from '@strapi/helper-plugin';
-import {
-	Alert,
-	Stack,
-	Button,
-	Field,
-	FieldError,
-	FieldInput,
-	Tabs,
-	Tab,
-	TabGroup,
-	TabPanels,
-	TabPanel,
-	Box
-} from '@strapi/design-system';
-import Option from './option';
+import { Alert, Stack, Button, Tabs, Tab, TabGroup, TabPanels } from '@strapi/design-system';
 import useContentTypeOptions, { IContentTypeOption } from './hooks/use-content-type-options';
 import usePageOptions from './hooks/use-page-options';
 import getTrad from '../../utils/get-trad';
 import { INTERNAL_LINK_TYPE } from '../factory';
 import { IUseInternalLinkInputReturn } from '../input/use-internal-link-input';
 import usePlatformOptions from './hooks/use-platform-options';
-import { PageSearch } from './page-select';
 import { Platform } from '../../api/platform';
 import { IInternalLinkAttribute } from '..';
 import { useGetConfig } from '../../api/config';
-import { Label } from '../label';
-
-import { ExternalApiSearch } from './source-select';
 import { IReactSelectValue } from '../Combobox';
+import { InternalTab } from './tabs/internal-tab';
+import { ExternalTab } from './tabs/external-tab';
+import { SourceTab } from './tabs/source-tab';
 
 interface IProps extends Omit<IUseInternalLinkInputReturn, 'initialLink' | 'isInitialData' | 'resetInternalLink'> {
 	attributeOptions?: IInternalLinkAttribute['options'];
@@ -46,31 +30,19 @@ const InternalLinkForm = ({
 	shouldShowTitle
 }: IProps): JSX.Element => {
 	const { formatMessage } = useIntl();
-	const { data: pluginConfig, isLoading: isLoadingConfig } = useGetConfig({});
+	const { data: pluginConfig } = useGetConfig({});
 	const useSinglePageType = !!pluginConfig?.useSinglePageType || pluginConfig?.pageBuilder?.enabled;
 	const noUrlValidation = pluginConfig?.noUrlValidation;
-	const pageBuilderEnabled = pluginConfig?.pageBuilder?.enabled;
-	const externalApi = attributeOptions?.enableExternalApi;
-
+	const externalApi = attributeOptions?.externalApi?.enabled;
 	// More information including tests: https://regexr.com/7p9qh
 	const defaultUrlRegex = new RegExp(
 		/(^https?:\/\/(www.)?[a-zA-Z0-9]{1,}.[^s]{2,}((\/[a-zA-Z0-9\-\_\=\?\%\&\#]{1,}){1,})?)\/?$|^mailto:[\w-\. +]+@([\w-]+\.)+[\w-]{2,4}$|^tel:((\+|00(\s|\s?\-\s?)?)[0-9]{2}(\s|\s?\-\s?)?(\(0\)[\-\s]?)?|0)[0-9](((\s|\s?\-\s?)?[0-9]){1,})|^#[a-zA-Z0-9\,\[\]\-\_\=\?\%\&\#]{1,}$/
 	);
-
-	const {
-		contentType,
-		setContentTypeUid,
-		contentTypeOptions,
-		contentTypeOptionsIsLoading,
-		contentTypeOptionsIsFetching
-	} = useContentTypeOptions(link.targetContentTypeUid);
-
-	const { page, pageId, setPageId, pageOptionsIsLoading } = usePageOptions(contentType, link.targetContentTypeId);
-	const { platform, setPlatformId, platformOptions, platformOptionsIsLoading, platformOptionsIsFetching } =
-		usePlatformOptions({ page, pageOptionsIsLoading });
+	const { contentType, setContentTypeUid } = useContentTypeOptions(link.targetContentTypeUid);
+	const { page, setPageId, pageOptionsIsLoading } = usePageOptions(contentType, link.targetContentTypeId);
+	const { setPlatformId } = usePlatformOptions({ page, pageOptionsIsLoading });
 	const [isExternalTab, setIsExternalTab] = useState<boolean>(link.type === 'external');
 	const [isSourceTab, setIsSourceTab] = useState<boolean>(link.type === 'source');
-	const translationLinkKey = !isExternalTab ? 'generated-link' : 'link';
 
 	useEffect(() => {
 		if (pluginConfig && useSinglePageType) {
@@ -81,7 +53,8 @@ const InternalLinkForm = ({
 	const checkTab = () => {
 		if (isExternalTab) {
 			return 1;
-		} else if (isSourceTab) {
+		}
+		if (isSourceTab) {
 			return 2;
 		} else {
 			return 0;
@@ -190,18 +163,6 @@ const InternalLinkForm = ({
 			targetContentTypeUid: '',
 			targetContentTypeId: null
 		}));
-	};
-
-	const getLoadingMessage = () => {
-		return formatMessage({
-			id: getTrad('internal-link.loading')
-		});
-	};
-
-	const getNoOptionsMessage = () => {
-		return formatMessage({
-			id: getTrad('internal-link.empty')
-		});
 	};
 
 	const onTextBlur = async (event: React.FocusEvent<HTMLInputElement>) => {
@@ -313,262 +274,69 @@ const InternalLinkForm = ({
 	return (
 		<Stack spacing={6}>
 			<TabGroup
-				label="Some stuff for the label"
+				label="internalLinkTabs"
 				id="tabs"
 				onTabChange={(selected: number) => tabChange(selected)}
 				initialSelectedTabIndex={checkTab}
 			>
 				<Tabs>
-					<Tab>Internal</Tab>
-					<Tab>External</Tab>
-					{externalApi && <Tab>Source</Tab>}
+					<Tab>
+						{formatMessage({
+							id: getTrad('internal-link.tab.internal.label')
+						})}
+					</Tab>
+					<Tab>
+						{formatMessage({
+							id: getTrad('internal-link.tab.external.label')
+						})}
+					</Tab>
+					{externalApi && (
+						<Tab>
+							{formatMessage({
+								id: getTrad('internal-link.tab.source.label')
+							})}
+						</Tab>
+					)}
 				</Tabs>
 				<TabPanels>
 					{/* This is the first tab */}
-					<TabPanel>
-						<Box color="neutral800" padding={4} background="neutral0">
-							{shouldShowTitle && (
-								<Field name="text" id="text" error={errors.text} required>
-									<Label>
-										{formatMessage({
-											id: getTrad('internal-link.form.text')
-										})}
-									</Label>
+					<InternalTab
+						errors={errors}
+						link={link}
+						shouldShowTitle={shouldShowTitle}
+						attributeOptions={attributeOptions}
+						onTextBlur={onTextBlur}
+						onTextChange={onTextChange}
+						onPageChange={onPageChange}
+						onUrlAdditionChange={onUrlAdditionChange}
+						onUrlAdditionBlur={onUrlAdditionBlur}
+						onContentTypeChange={onContentTypeChange}
+						onPlatformChange={onPlatformChange}
+					/>
+					<ExternalTab
+						errors={errors}
+						link={link}
+						shouldShowTitle={shouldShowTitle}
+						isExternalTab={isExternalTab}
+						onLinkBlur={onLinkBlur}
+						onLinkChange={onLinkChange}
+						onTextBlur={onTextBlur}
+						onTextChange={onTextChange}
+					/>
 
-									<FieldInput type="text" value={link.text} onChange={onTextChange} onBlur={onTextBlur} required />
-
-									<FieldError />
-								</Field>
-							)}
-							{!isExternalTab && pageBuilderEnabled && platformOptions.length > 1 && (
-								<Box paddingTop={4}>
-									<Field required>
-										<Label>
-											{formatMessage({
-												id: getTrad('internal-link.form.platform')
-											})}
-										</Label>
-
-										<ReactSelect
-											inputId="platform"
-											name="platform"
-											value={platform}
-											menuPosition="absolute"
-											menuPlacement="auto"
-											// @ts-ignore Option is of correct type
-											components={{ Option }}
-											options={platformOptionsIsFetching ? [] : platformOptions}
-											isLoading={platformOptionsIsLoading}
-											isDisabled={!contentType || platformOptionsIsLoading}
-											// @ts-ignore onChange is of correct type
-											onChange={onPlatformChange}
-											placeholder={
-												platformOptionsIsLoading
-													? formatMessage({
-															id: getTrad('internal-link.loading')
-													  })
-													: formatMessage({
-															id: getTrad('internal-link.form.platform.placeholder')
-													  })
-											}
-											loadingMessage={getLoadingMessage}
-											noOptionsMessage={getNoOptionsMessage}
-											isSearchable
-											// @ts-ignore isClear is of correct type
-											isClear
-										/>
-									</Field>
-								</Box>
-							)}
-
-							{!isExternalTab && !isLoadingConfig && !useSinglePageType && (
-								<Box paddingTop={4}>
-									<Field required>
-										<Label>
-											{formatMessage({
-												id: getTrad('internal-link.form.collection')
-											})}
-										</Label>
-
-										<ReactSelect
-											inputId="collection"
-											name="collection"
-											value={contentType}
-											menuPosition="absolute"
-											menuPlacement="auto"
-											// @ts-ignore Option is of correct type
-											components={{ Option }}
-											options={contentTypeOptionsIsFetching ? [] : contentTypeOptions}
-											isLoading={contentTypeOptionsIsLoading}
-											isDisabled={contentTypeOptionsIsLoading}
-											// @ts-ignore onChange is of correct type
-											onChange={onContentTypeChange}
-											placeholder={
-												contentTypeOptionsIsLoading
-													? formatMessage({
-															id: getTrad('internal-link.loading')
-													  })
-													: formatMessage({
-															id: getTrad('internal-link.form.collection.placeholder')
-													  })
-											}
-											loadingMessage={getLoadingMessage}
-											noOptionsMessage={getNoOptionsMessage}
-											isSearchable
-											// @ts-ignore isClear is of correct type
-											isClear
-										/>
-									</Field>
-								</Box>
-							)}
-
-							<Box paddingTop={4}>
-								{!isExternalTab && (
-									<PageSearch
-										selectedId={pageId}
-										uid={contentType?.uid}
-										platformTitle={pageBuilderEnabled ? platform?.label : undefined}
-										onChange={(value) => onPageChange(value?.id, value?.path, value?.platform?.domain)}
-										pluginConfig={pluginConfig}
-										attributeOptions={attributeOptions}
-									/>
-								)}
-							</Box>
-
-							{pluginConfig?.enableUrlAddition && !isExternalTab && (
-								<Box paddingTop={4}>
-									<Field name="urlAddition" id="urlAddition" error={errors.urlAddition}>
-										<Label>
-											{formatMessage({
-												id: getTrad('internal-link.form.urlAddition')
-											})}
-										</Label>
-
-										<FieldInput
-											type="text"
-											value={link?.urlAddition}
-											onChange={onUrlAdditionChange}
-											disabled={pageOptionsIsLoading || !link?.domain}
-											onBlur={onUrlAdditionBlur}
-										/>
-
-										<FieldError />
-									</Field>
-								</Box>
-							)}
-						</Box>
-					</TabPanel>
-					{/* This is the second tab */}
-					<TabPanel>
-						<Box color="neutral800" padding={4} background="neutral0">
-							{shouldShowTitle && (
-								<Field name="text" id="text" error={errors.text} required>
-									<Label>
-										{formatMessage({
-											id: getTrad('internal-link.form.text')
-										})}
-									</Label>
-
-									<FieldInput type="text" value={link.text} onChange={onTextChange} onBlur={onTextBlur} required />
-
-									<FieldError />
-								</Field>
-							)}
-							<Box paddingTop={4}>
-								<div>
-									<Field name="link" id="link" error={errors.url} required>
-										<Label>
-											{formatMessage({
-												id: getTrad(`internal-link.form.${translationLinkKey}`)
-											})}
-										</Label>
-
-										<FieldInput
-											type="text"
-											value={link.url}
-											onChange={onLinkChange}
-											onBlur={onLinkBlur}
-											required
-											disabled={!isExternalTab}
-											placeholder={formatMessage({
-												id: getTrad(`internal-link.form.${translationLinkKey}.placeholder`)
-											})}
-										/>
-
-										<FieldError />
-									</Field>
-								</div>
-							</Box>
-						</Box>
-					</TabPanel>
-					{/* third source tab */}
-					<TabPanel>
-						<Box color="neutral800" padding={4} background="neutral0">
-							{shouldShowTitle && (
-								<Field name="text" id="text" error={errors.text} required>
-									<Label>
-										{formatMessage({
-											id: getTrad('internal-link.form.text')
-										})}
-									</Label>
-
-									<FieldInput type="text" value={link.text} onChange={onTextChange} onBlur={onTextBlur} required />
-
-									<FieldError />
-								</Field>
-							)}
-							<Box paddingTop={4}>
-								<ExternalApiSearch
-									externalApiValueMapping={attributeOptions?.externalApiValueMapping}
-									externalApiLabelMapping={attributeOptions?.externalApiLabelMapping}
-									externalApiUrl={attributeOptions?.externalApi}
-									selectedValue={link.externalApiValue}
-									onChange={(value) => onSourceChange(value)}
-								/>
-							</Box>
-						</Box>
-					</TabPanel>
+					<SourceTab
+						errors={errors}
+						link={link}
+						attributeOptions={attributeOptions}
+						shouldShowTitle={shouldShowTitle}
+						onLinkBlur={onLinkBlur}
+						onLinkChange={onLinkChange}
+						onSourceChange={onSourceChange}
+						onTextBlur={onTextBlur}
+						onTextChange={onTextChange}
+					/>
 				</TabPanels>
 			</TabGroup>
-
-			{!isExternalTab && pageBuilderEnabled && platformOptions.length > 1 && (
-				<Field required>
-					<Label>
-						{formatMessage({
-							id: getTrad('internal-link.form.platform')
-						})}
-					</Label>
-
-					<ReactSelect
-						inputId="platform"
-						name="platform"
-						value={platform}
-						menuPosition="absolute"
-						menuPlacement="auto"
-						// @ts-ignore Option is of correct type
-						components={{ Option }}
-						options={platformOptionsIsFetching ? [] : platformOptions}
-						isLoading={platformOptionsIsLoading}
-						isDisabled={!contentType || platformOptionsIsLoading}
-						// @ts-ignore onChange is of correct type
-						onChange={onPlatformChange}
-						placeholder={
-							platformOptionsIsLoading
-								? formatMessage({
-										id: getTrad('internal-link.loading')
-								  })
-								: formatMessage({
-										id: getTrad('internal-link.form.platform.placeholder')
-								  })
-						}
-						loadingMessage={getLoadingMessage}
-						noOptionsMessage={getNoOptionsMessage}
-						isSearchable
-						// @ts-ignore isClear is of correct type
-						isClear
-					/>
-				</Field>
-			)}
 
 			{errors?.link && (
 				<Alert

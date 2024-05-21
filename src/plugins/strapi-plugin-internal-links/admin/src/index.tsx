@@ -88,7 +88,7 @@ export default {
 									id: getTrad('internal-link.options.externalApi.enable'),
 									defaultMessage: 'Enable external API source'
 								},
-								name: 'options.enableExternalApi',
+								name: 'options.externalApi.enabled',
 								description: {
 									id: getTrad('internal-link.options.externalApi.enable.description'),
 									defaultMessage: 'Enable this to connect with an external API'
@@ -101,7 +101,7 @@ export default {
 									id: getTrad('internal-link.options.source.options'),
 									defaultMessage: 'External API Source'
 								},
-								name: 'options.externalApi',
+								name: 'options.externalApi.apiUrl',
 								description: {
 									id: getTrad('internal-link.options.source.options.description'),
 									defaultMessage: 'Select the name of the slug field'
@@ -114,7 +114,7 @@ export default {
 									id: getTrad('internal-link.options.source.label.mapping'),
 									defaultMessage: 'Label from API'
 								},
-								name: 'options.externalApiLabelMapping',
+								name: 'options.externalApi.labelPath',
 								description: {
 									id: getTrad('internal-link.options.source.label.mapping.description'),
 									defaultMessage: 'Select the label to be mapped from the API'
@@ -127,7 +127,7 @@ export default {
 									id: getTrad('internal-link.options.source.value.mapping'),
 									defaultMessage: 'Value from API'
 								},
-								name: 'options.externalApiValueMapping',
+								name: 'options.externalApi.valuePath',
 								description: {
 									id: getTrad('internal-link.options.source.value.mapping.description'),
 									defaultMessage: 'Select the value to be mapped from the API'

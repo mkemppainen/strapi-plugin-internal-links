@@ -1,13 +1,13 @@
 import getRequestUrl from '../utils/get-request-url';
 
 export type externalApiResult = {
-	data: any[];
+	data: Record<string, any>;
 };
 
 export const fetchSource = async (
 	{ fetchClient }: Record<string, any>,
-	externalApiUrl?: string,
-	inputValue?: string
+	externalApiUrl: string,
+	inputValue: string
 ): Promise<externalApiResult | undefined> => {
 	try {
 		const { post } = fetchClient;

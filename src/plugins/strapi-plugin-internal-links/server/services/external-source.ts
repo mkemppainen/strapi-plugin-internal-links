@@ -1,20 +1,16 @@
-import axios from 'axios';
-
-type externalApiData = {
+type ExternalApiData = {
 	url: string;
 	searchQuery: string;
 };
 
-const getexternalApiData = async (data: externalApiData) => {
+const getexternalApiData = async (data: ExternalApiData) => {
 	const url = createUrl(data);
-	const res = (await axios.get(url)).data;
-	return res;
+	// @ts-ignore
+	const result = await (await fetch(url)).json();
+	return result;
 };
 
-const createUrl = (data: externalApiData) => {
-	if (!data.searchQuery) {
-		return data.url;
-	}
+const createUrl = (data: ExternalApiData) => {
 	return `${data.url}${data.searchQuery}`;
 };
 
