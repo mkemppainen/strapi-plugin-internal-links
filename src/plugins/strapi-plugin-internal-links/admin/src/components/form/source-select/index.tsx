@@ -68,8 +68,8 @@ export const ExternalApiSearch = ({
 			</Label>
 			<Flex width="100%" gap={2}>
 				<Combobox
-					key={`somethinggg`}
-					id="collectionTypeSearch"
+					key={`externalApiSearch`}
+					id="externalApiSearch"
 					loadOptions={(i, c) => debouncedFetch(i, c)}
 					cacheOptions
 					// @ts-ignore onChange is correct
