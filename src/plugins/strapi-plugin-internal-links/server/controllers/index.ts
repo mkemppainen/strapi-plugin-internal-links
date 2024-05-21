@@ -2,7 +2,7 @@ import internalLink from './internal-link';
 import singleType from './single-type';
 import collectionType from './collection-type';
 import contentType from './content-type';
-import externalSource from './external-source';
+import externalApi from './external-source';
 import config from './config';
 
 export default {
@@ -10,6 +10,6 @@ export default {
 	'content-type': contentType,
 	'single-type': singleType,
 	'collection-type': collectionType,
-	'external-source': externalSource,
+	'external-source': externalApi,
 	config
 };

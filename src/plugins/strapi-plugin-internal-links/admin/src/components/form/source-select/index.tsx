@@ -18,7 +18,7 @@ interface Props {
 	onChange: (item?: any) => void;
 }
 
-export const ExternalSourceSearch = ({
+export const ExternalApiSearch = ({
 	onChange,
 	selectedValue,
 	externalApiUrl,

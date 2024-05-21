@@ -1,17 +1,17 @@
 import axios from 'axios';
 
-type ExternalSourceData = {
+type externalApiData = {
 	url: string;
 	searchQuery: string;
 };
 
-const getExternalSourceData = async (data: ExternalSourceData) => {
+const getexternalApiData = async (data: externalApiData) => {
 	const url = createUrl(data);
 	const res = (await axios.get(url)).data;
 	return res;
 };
 
-const createUrl = (data: ExternalSourceData) => {
+const createUrl = (data: externalApiData) => {
 	if (!data.searchQuery) {
 		return data.url;
 	}
@@ -19,5 +19,5 @@ const createUrl = (data: ExternalSourceData) => {
 };
 
 export default {
-	getExternalSourceData
+	getexternalApiData
 };

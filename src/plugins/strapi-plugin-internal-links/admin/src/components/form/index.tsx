@@ -29,7 +29,7 @@ import { IInternalLinkAttribute } from '..';
 import { useGetConfig } from '../../api/config';
 import { Label } from '../label';
 
-import { ExternalSourceSearch } from './source-select';
+import { ExternalApiSearch } from './source-select';
 import { IReactSelectValue } from '../Combobox';
 
 interface IProps extends Omit<IUseInternalLinkInputReturn, 'initialLink' | 'isInitialData' | 'resetInternalLink'> {
@@ -50,7 +50,7 @@ const InternalLinkForm = ({
 	const useSinglePageType = !!pluginConfig?.useSinglePageType || pluginConfig?.pageBuilder?.enabled;
 	const noUrlValidation = pluginConfig?.noUrlValidation;
 	const pageBuilderEnabled = pluginConfig?.pageBuilder?.enabled;
-	const externalSource = attributeOptions?.enableExternalApi;
+	const externalApi = attributeOptions?.enableExternalApi;
 
 	// More information including tests: https://regexr.com/7p9qh
 	const defaultUrlRegex = new RegExp(
@@ -109,14 +109,14 @@ const InternalLinkForm = ({
 		if (!props) {
 			setLink((previousValue) => ({
 				...previousValue,
-				externalSourceValue: '',
+				externalApiValue: '',
 				url: ''
 			}));
 			return;
 		}
 		setLink((previousValue) => ({
 			...previousValue,
-			externalSourceValue: props ? props.value : '',
+			externalApiValue: props ? props.value : '',
 			url: props.value
 		}));
 	};
@@ -321,7 +321,7 @@ const InternalLinkForm = ({
 				<Tabs>
 					<Tab>Internal</Tab>
 					<Tab>External</Tab>
-					{externalSource && <Tab>Source</Tab>}
+					{externalApi && <Tab>Source</Tab>}
 				</Tabs>
 				<TabPanels>
 					{/* This is the first tab */}
@@ -518,11 +518,11 @@ const InternalLinkForm = ({
 								</Field>
 							)}
 							<Box paddingTop={4}>
-								<ExternalSourceSearch
+								<ExternalApiSearch
 									externalApiValueMapping={attributeOptions?.externalApiValueMapping}
 									externalApiLabelMapping={attributeOptions?.externalApiLabelMapping}
 									externalApiUrl={attributeOptions?.externalApi}
-									selectedValue={link.externalSourceValue}
+									selectedValue={link.externalApiValue}
 									onChange={(value) => onSourceChange(value)}
 								/>
 							</Box>

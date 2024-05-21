@@ -13,5 +13,5 @@ export interface InternalLink {
 	createdAt?: Date | null;
 	updatedAt?: Date | null;
 	urlAddition?: string | null;
-	externalSourceValue?: string | null;
+	externalApiValue?: string | null;
 }

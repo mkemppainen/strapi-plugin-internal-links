@@ -16,7 +16,7 @@ export interface IInternalLink {
 	type: (typeof INTERNAL_LINK_TYPE)[keyof typeof INTERNAL_LINK_TYPE];
 	domain?: string;
 	urlAddition?: string;
-	externalSourceValue?: string;
+	externalApiValue?: string;
 }
 
 export const createInternalLink = (
