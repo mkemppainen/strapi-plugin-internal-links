@@ -68,11 +68,11 @@
 			},
 			"options": {
 				"noTitle": true,
-				"enableExternalApi": true,
-				"slug": "f",
-				"externalApi": "http://localhost:3000",
-				"externalApiLabelMapping": "startPointReference",
-				"externalApiValueMapping": "question"
+				"enableExternalApi": false,
+				"slug": "",
+				"externalApi": "",
+				"externalApiLabelMapping": "",
+				"externalApiValueMapping": ""
 			},
 			"type": "customField",
 			"customField": "plugin::internal-links.internal-link"

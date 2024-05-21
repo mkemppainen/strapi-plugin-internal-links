@@ -646,11 +646,11 @@ export interface ApiPagePage extends Schema.CollectionType {
 				'plugin::internal-links.internal-link',
 				{
 					noTitle: true;
-					enableExternalApi: true;
-					slug: 'f';
-					externalApi: 'http://localhost:3000';
-					externalApiLabelMapping: 'startPointReference';
-					externalApiValueMapping: 'question';
+					enableExternalApi: false;
+					slug: '';
+					externalApi: '';
+					externalApiLabelMapping: '';
+					externalApiValueMapping: '';
 				}
 			> &
 			Attribute.SetPluginOptions<{
