@@ -299,7 +299,6 @@ const InternalLinkForm = ({
 					)}
 				</Tabs>
 				<TabPanels>
-					{/* This is the first tab */}
 					<InternalTab
 						errors={errors}
 						link={link}
@@ -323,7 +322,6 @@ const InternalLinkForm = ({
 						onTextBlur={onTextBlur}
 						onTextChange={onTextChange}
 					/>
-
 					<SourceTab
 						errors={errors}
 						link={link}

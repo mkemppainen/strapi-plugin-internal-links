@@ -14,9 +14,7 @@ export default {
 				method: 'GET',
 				path: '/content-types',
 				handler: 'content-type.find',
-				auth: false,
 				config: {
-					auth: false,
 					policies: []
 				}
 			},
