@@ -15,7 +15,7 @@ const createUrl = (data: ExternalSourceData) => {
 	if (!data.searchQuery) {
 		return data.url;
 	}
-	return `${data.url}?searchQuery=${data.searchQuery}`;
+	return `${data.url}${data.searchQuery}`;
 };
 
 export default {
