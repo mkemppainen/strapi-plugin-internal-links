@@ -646,12 +646,6 @@ export interface ApiPagePage extends Schema.CollectionType {
 				'plugin::internal-links.internal-link',
 				{
 					noTitle: true;
-					externalApi: {
-						enabled: true;
-						apiUrl: 'http://localhost:3000?searchQuery=';
-						labelPath: 'startPointReference';
-						valuePath: 'question';
-					};
 				}
 			> &
 			Attribute.SetPluginOptions<{
