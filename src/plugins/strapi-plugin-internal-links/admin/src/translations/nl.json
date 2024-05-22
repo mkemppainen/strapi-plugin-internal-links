@@ -35,6 +35,7 @@
 	"internal-link.form.collection": "Selecteer collectie type",
 	"internal-link.form.collection.placeholder": "Bijvoorbeeld nieuws, subsidies of wegwerkzaamheden",
 	"internal-link.form.collection.clear": "Reset collectie type keuze",
+	"internal-link.form.source.start": "Selecteer een startpunt",
 	"internal-link.form.page": "Selecteer de pagina/taal",
 	"internal-link.form.page.placeholder": "Kies een pagina",
 	"internal-link.form.source.placeholder": "Zoek om de juiste keuze te kunnen maken",

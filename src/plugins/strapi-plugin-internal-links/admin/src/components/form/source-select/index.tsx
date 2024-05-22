@@ -30,7 +30,11 @@ export const ExternalApiSearch = ({
 	const mappedSelectedValue = mapSelectItem(selectedValue);
 
 	const getItems = async (inputValue: string): Promise<IReactSelectValue[]> => {
-		const externalItems = await fetchSource({ fetchClient }, externalApiUrl, inputValue);
+		if (!externalApiUrl) {
+			throw new Error('No URL field set in settings');
+		}
+
+		const externalItems = await fetchSource({ fetchClient, externalApiUrl, inputValue });
 		if (!externalItems || !externalApiLabelpath || !externalApiValuepath) {
 			return [];
 		}
@@ -61,7 +65,7 @@ export const ExternalApiSearch = ({
 			<Label>
 				<FieldLabel required>
 					{formatMessage({
-						id: getTrad('internal-link.form.page')
+						id: getTrad('internal-link.form.source.start')
 					})}
 				</FieldLabel>
 			</Label>

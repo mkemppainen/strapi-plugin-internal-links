@@ -39,10 +39,9 @@ const InternalLinkForm = ({
 		/(^https?:\/\/(www.)?[a-zA-Z0-9]{1,}.[^s]{2,}((\/[a-zA-Z0-9\-\_\=\?\%\&\#]{1,}){1,})?)\/?$|^mailto:[\w-\. +]+@([\w-]+\.)+[\w-]{2,4}$|^tel:((\+|00(\s|\s?\-\s?)?)[0-9]{2}(\s|\s?\-\s?)?(\(0\)[\-\s]?)?|0)[0-9](((\s|\s?\-\s?)?[0-9]){1,})|^#[a-zA-Z0-9\,\[\]\-\_\=\?\%\&\#]{1,}$/
 	);
 	const { contentType, setContentTypeUid } = useContentTypeOptions(link.targetContentTypeUid);
-	const { page, setPageId, pageOptionsIsLoading } = usePageOptions(contentType, link.targetContentTypeId);
+	const { page, pageId, setPageId, pageOptionsIsLoading } = usePageOptions(contentType, link.targetContentTypeId);
 	const { setPlatformId } = usePlatformOptions({ page, pageOptionsIsLoading });
-	const [isExternalTab, setIsExternalTab] = useState<boolean>(link.type === 'external');
-	const [isSourceTab, setIsSourceTab] = useState<boolean>(link.type === 'source');
+	const [tabType, setTabType] = useState<'internal' | 'external' | 'source'>(link.type || INTERNAL_LINK_TYPE.INTERNAL);
 
 	useEffect(() => {
 		if (pluginConfig && useSinglePageType) {
@@ -51,14 +50,13 @@ const InternalLinkForm = ({
 	}, [pluginConfig]);
 
 	const checkTab = () => {
-		if (isExternalTab) {
+		if (tabType === INTERNAL_LINK_TYPE.EXTERNAL) {
 			return 1;
 		}
-		if (isSourceTab) {
+		if (tabType === INTERNAL_LINK_TYPE.SOURCE) {
 			return 2;
-		} else {
-			return 0;
 		}
+		return 0;
 	};
 
 	const onContentTypeChange = (value: IContentTypeOption) => {
@@ -236,16 +234,13 @@ const InternalLinkForm = ({
 			url: undefined
 		}));
 		if (selected === 0) {
-			setIsExternalTab(false);
-			setIsSourceTab(false);
+			setTabType(INTERNAL_LINK_TYPE.INTERNAL);
 			setLink((value) => ({ ...value, type: INTERNAL_LINK_TYPE.INTERNAL }));
 		} else if (selected === 1) {
-			setIsExternalTab(true);
-			setIsSourceTab(false);
+			setTabType(INTERNAL_LINK_TYPE.EXTERNAL);
 			setLink((value) => ({ ...value, type: INTERNAL_LINK_TYPE.EXTERNAL }));
 		} else if (selected === 2) {
-			setIsExternalTab(false);
-			setIsSourceTab(true);
+			setTabType(INTERNAL_LINK_TYPE.SOURCE);
 			setLink((value) => ({ ...value, type: INTERNAL_LINK_TYPE.SOURCE }));
 		}
 	};
@@ -259,7 +254,7 @@ const InternalLinkForm = ({
 	};
 
 	useLayoutEffect(() => {
-		setIsExternalTab(link.type === 'external');
+		setTabType(link.type);
 	}, []);
 
 	useEffect(() => {
@@ -302,6 +297,8 @@ const InternalLinkForm = ({
 					<InternalTab
 						errors={errors}
 						link={link}
+						pageId={pageId}
+						contentType={contentType}
 						shouldShowTitle={shouldShowTitle}
 						attributeOptions={attributeOptions}
 						onTextBlur={onTextBlur}
@@ -316,7 +313,6 @@ const InternalLinkForm = ({
 						errors={errors}
 						link={link}
 						shouldShowTitle={shouldShowTitle}
-						isExternalTab={isExternalTab}
 						onLinkBlur={onLinkBlur}
 						onLinkChange={onLinkChange}
 						onTextBlur={onTextBlur}

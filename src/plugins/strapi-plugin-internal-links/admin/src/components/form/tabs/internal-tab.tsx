@@ -20,6 +20,8 @@ interface Props {
 	isExternalTab?: boolean;
 	errors: IInternalLinkErrors;
 	attributeOptions?: IInternalLinkAttribute['options'];
+	contentType?: IContentTypeOption;
+	pageId?: number;
 	onTextChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	onTextBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
 	onPageChange: (id?: number, path?: string, domain?: string) => void;
@@ -32,9 +34,10 @@ interface Props {
 export const InternalTab = ({
 	link,
 	shouldShowTitle,
-	isExternalTab,
+	pageId,
 	errors,
 	attributeOptions,
+	contentType,
 	onTextBlur,
 	onTextChange,
 	onPageChange,
@@ -44,9 +47,10 @@ export const InternalTab = ({
 	onPlatformChange
 }: Props) => {
 	const { formatMessage } = useIntl();
-	const { contentType, contentTypeOptions, contentTypeOptionsIsLoading, contentTypeOptionsIsFetching } =
-		useContentTypeOptions(link.targetContentTypeUid);
-	const { page, pageId, pageOptionsIsLoading } = usePageOptions(contentType, link.targetContentTypeId);
+	const { contentTypeOptions, contentTypeOptionsIsLoading, contentTypeOptionsIsFetching } = useContentTypeOptions(
+		link.targetContentTypeUid
+	);
+	const { page, pageOptionsIsLoading } = usePageOptions(contentType, link.targetContentTypeId);
 	const { data: pluginConfig, isLoading: isLoadingConfig } = useGetConfig({});
 	const useSinglePageType = !!pluginConfig?.useSinglePageType || pluginConfig?.pageBuilder?.enabled;
 	const pageBuilderEnabled = pluginConfig?.pageBuilder?.enabled;
@@ -84,7 +88,7 @@ export const InternalTab = ({
 						<FieldError />
 					</Field>
 				)}
-				{!isExternalTab && pageBuilderEnabled && platformOptions.length > 1 && (
+				{pageBuilderEnabled && platformOptions.length > 1 && (
 					<Box paddingTop={4}>
 						<Field required>
 							<Label>
@@ -125,7 +129,7 @@ export const InternalTab = ({
 					</Box>
 				)}
 
-				{!isExternalTab && !isLoadingConfig && !useSinglePageType && (
+				{!isLoadingConfig && !useSinglePageType && (
 					<Box paddingTop={4}>
 						<Field required>
 							<Label>
@@ -167,19 +171,17 @@ export const InternalTab = ({
 				)}
 
 				<Box paddingTop={4}>
-					{!isExternalTab && (
-						<PageSearch
-							selectedId={pageId}
-							uid={contentType?.uid}
-							platformTitle={pageBuilderEnabled ? platform?.label : undefined}
-							onChange={(value) => onPageChange(value?.id, value?.path, value?.platform?.domain)}
-							pluginConfig={pluginConfig}
-							attributeOptions={attributeOptions}
-						/>
-					)}
+					<PageSearch
+						selectedId={pageId}
+						uid={contentType?.uid}
+						platformTitle={pageBuilderEnabled ? platform?.label : undefined}
+						onChange={(value) => onPageChange(value?.id, value?.path, value?.platform?.domain)}
+						pluginConfig={pluginConfig}
+						attributeOptions={attributeOptions}
+					/>
 				</Box>
 
-				{pluginConfig?.enableUrlAddition && !isExternalTab && (
+				{pluginConfig?.enableUrlAddition && (
 					<Box paddingTop={4}>
 						<Field name="urlAddition" id="urlAddition" error={errors.urlAddition}>
 							<Label>
