@@ -86,6 +86,26 @@ yarn build
 npm run build
 ```
 
+## external Source
+
+The options of the internal link has a option in the contet-type builder to add an external source to the link module.
+
+```json
+// ...
+"options": {
+  "externalApi": {
+    "enabled": boolean,
+    "apiUrl": string,
+    "labelPath": string,
+    "valuePath": string
+  },
+},
+// ...			
+```
+
+If the external API is enabled, all fields are required (you can't make if statement in the option thing to make it required) so fill it in.
+
+
 ## internal-links settings page
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum nulla ex, maximus quis libero ut, aliquet tincidunt erat. Nulla ut eleifend est, non hendrerit ante. Duis convallis dui quam, quis vehicula sem pulvinar sed. Praesent sit amet lorem eleifend, rutrum mi et, efficitur dolor. Nullam ullamcorper, nisl ac vestibulum tincidunt, purus tellus bibendum ante, at bibendum dui tortor et lectus. Ut volutpat pellentesque aliquam. Nulla euismod nibh nec augue bibendum posuere. Integer tincidunt sagittis leo sed viverra. Ut urna lorem, consectetur sit amet volutpat ut, aliquet non nulla. Fusce varius nisi at nibh feugiat, nec porta justo porttitor. Vivamus eros arcu, congue et quam eu, finibus tincidunt justo. Proin nec tortor lectus. Duis at lectus neque. Duis rhoncus lorem sit amet est dignissim congue. Etiam mattis maximus urna sed euismod.

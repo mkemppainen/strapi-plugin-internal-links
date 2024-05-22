@@ -47,6 +47,9 @@
 		},
 		"urlAddition": {
 			"type": "string"
+		},
+		"externalApiValue": {
+			"type": "string"
 		}
 	}
 }

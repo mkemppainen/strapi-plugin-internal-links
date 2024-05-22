@@ -59,6 +59,14 @@ export default {
 				}
 			},
 			{
+				method: 'POST',
+				path: '/source',
+				handler: 'external-source.find',
+				config: {
+					policies: []
+				}
+			},
+			{
 				method: 'PUT',
 				path: '/:id',
 				handler: 'internal-link.update',

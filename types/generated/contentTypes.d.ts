@@ -399,6 +399,7 @@ export interface PluginInternalLinksInternalLink extends Schema.CollectionType {
 		text: Attribute.String;
 		type: Attribute.String;
 		urlAddition: Attribute.String;
+		externalApiValue: Attribute.String;
 		createdAt: Attribute.DateTime;
 		updatedAt: Attribute.DateTime;
 		createdBy: Attribute.Relation<'plugin::internal-links.internal-link', 'oneToOne', 'admin::user'> &
@@ -439,6 +440,7 @@ export interface PluginInternalLinksInternalLinkWysiwyg extends Schema.Collectio
 		text: Attribute.String;
 		type: Attribute.String;
 		urlAddition: Attribute.String;
+		externalApiValue: Attribute.String;
 		createdAt: Attribute.DateTime;
 		updatedAt: Attribute.DateTime;
 		createdBy: Attribute.Relation<'plugin::internal-links.internal-link-wysiwyg', 'oneToOne', 'admin::user'> &
@@ -640,12 +642,7 @@ export interface ApiPagePage extends Schema.CollectionType {
 				};
 			}>;
 		link: Attribute.JSON &
-			Attribute.CustomField<
-				'plugin::internal-links.internal-link',
-				{
-					noTitle: true;
-				}
-			> &
+			Attribute.CustomField<'plugin::internal-links.internal-link'> &
 			Attribute.SetPluginOptions<{
 				i18n: {
 					localized: true;
