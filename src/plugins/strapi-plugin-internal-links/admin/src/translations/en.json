@@ -37,6 +37,7 @@
 	"internal-link.form.collection": "Select collection type",
 	"internal-link.form.collection.placeholder": "E.g.: news, subsidies or road maintenance",
 	"internal-link.form.collection.clear": "Reset collection type selection",
+	"internal-link.form.source.start": "Select a startpoint",
 	"internal-link.form.page": "Select page/language",
 	"internal-link.form.page.placeholder": "Select a page",
 	"internal-link.form.source.placeholder": "Search for the right item",

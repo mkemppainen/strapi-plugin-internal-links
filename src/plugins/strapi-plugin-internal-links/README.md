@@ -70,7 +70,12 @@ Add the custom field with the content-type builder or directly to the JSON.
 		"pageSearchOptions": {
 			"searchableFields": string[],
 			"subTitlePath": string
-		}
+		},
+		"externalApi": {
+    "enabled": boolean,
+    "apiUrl": string,
+    "labelPath": string,
+    "valuePath": string
 	},
 }
 // ...
@@ -89,19 +94,6 @@ npm run build
 ## external Source
 
 The options of the internal link has a option in the contet-type builder to add an external source to the link module.
-
-```json
-// ...
-"options": {
-  "externalApi": {
-    "enabled": boolean,
-    "apiUrl": string,
-    "labelPath": string,
-    "valuePath": string
-  },
-},
-// ...			
-```
 
 If the external API is enabled, all fields are required (you can't make if statement in the option thing to make it required) so fill it in.
 

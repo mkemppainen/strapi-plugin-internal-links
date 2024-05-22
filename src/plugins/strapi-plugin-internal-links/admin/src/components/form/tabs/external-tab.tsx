@@ -20,7 +20,6 @@ interface Props {
 export const ExternalTab = ({
 	link,
 	shouldShowTitle,
-	isExternalTab,
 	errors,
 	onTextBlur,
 	onTextChange,
@@ -28,7 +27,6 @@ export const ExternalTab = ({
 	onLinkChange
 }: Props) => {
 	const { formatMessage } = useIntl();
-	const translationLinkKey = !isExternalTab ? 'generated-link' : 'link';
 
 	return (
 		<TabPanel>
@@ -51,7 +49,7 @@ export const ExternalTab = ({
 						<Field name="link" id="link" error={errors.url} required>
 							<Label>
 								{formatMessage({
-									id: getTrad(`internal-link.form.${translationLinkKey}`)
+									id: getTrad('internal-link.form.link')
 								})}
 							</Label>
 
@@ -61,9 +59,8 @@ export const ExternalTab = ({
 								onChange={onLinkChange}
 								onBlur={onLinkBlur}
 								required
-								disabled={!isExternalTab}
 								placeholder={formatMessage({
-									id: getTrad(`internal-link.form.${translationLinkKey}.placeholder`)
+									id: getTrad('internal-link.form.link.placeholder')
 								})}
 							/>
 
