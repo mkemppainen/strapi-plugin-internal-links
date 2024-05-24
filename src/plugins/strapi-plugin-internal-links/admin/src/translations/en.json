@@ -14,6 +14,8 @@
 	"internal-link.options.source.options.description": "Fill in the url of the external API",
 	"internal-link.options.source.label.mapping": "Label from API",
 	"internal-link.options.source.label.mapping.description": "Select the label to be mapped from the API",
+	"internal-link.options.source.category.mapping":"Optional Category to map from API",
+	"internal-link.options.source.value.category.description": "Select the category to be mapped from the API",
 	"internal-link.options.source.value.mapping": "Value from API",
 	"internal-link.options.source.value.mapping.description": "Select the value to be mapped from the API",
 	"internal-link.errors.remaining-links": "There are still pages that link to this page",

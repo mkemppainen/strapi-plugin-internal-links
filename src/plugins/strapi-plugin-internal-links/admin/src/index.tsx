@@ -134,6 +134,19 @@ export default {
 								},
 								type: 'text',
 								defaultValue: ''
+							},
+							{
+								intlLabel: {
+									id: getTrad('internal-link.options.source.category.mapping'),
+									defaultMessage: 'Optional Category to map from API'
+								},
+								name: 'options.externalApi.categoryPath',
+								description: {
+									id: getTrad('internal-link.options.source.value.category.description'),
+									defaultMessage: 'Select the category to be mapped from the API'
+								},
+								type: 'text',
+								defaultValue: ''
 							}
 						]
 					}

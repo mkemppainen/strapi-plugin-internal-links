@@ -6,15 +6,17 @@ import { Flex, FieldLabel } from '@strapi/design-system';
 import { Combobox, IReactSelectValue } from '../../Combobox';
 import getTrad from '../../../utils/get-trad';
 import { Label } from '../../label';
-import { fetchSource } from '../../../api/fetch-source';
+import { ExternalApiResult, fetchSource } from '../../../api/fetch-source';
+import { IInternalLink } from '../../factory';
 
 const SEARCH_DEBOUNCE_MS = 150;
 
 interface Props {
-	selectedValue?: string;
+	selectedValue?: IInternalLink;
 	externalApiUrl: string;
 	externalApiLabelpath?: string;
 	externalApiValuepath?: string;
+	externalApiCategorieLabelPath?: string;
 	onChange: (item?: Record<string, any>) => void;
 }
 
@@ -23,7 +25,8 @@ export const ExternalApiSearch = ({
 	selectedValue,
 	externalApiUrl,
 	externalApiLabelpath,
-	externalApiValuepath
+	externalApiValuepath,
+	externalApiCategorieLabelPath
 }: Props) => {
 	const { formatMessage } = useIntl();
 	const fetchClient = useFetchClient();
@@ -39,9 +42,14 @@ export const ExternalApiSearch = ({
 			return [];
 		}
 
-		const mappedData = externalItems.data.map((item: Record<string, any>) => ({
+		// fetch gives data back, but some apis gives also data back so you get data.data
+		const data = checkData(externalItems);
+
+		const mappedData = data.map((item: Record<string, any>) => ({
 			value: objGet(item, externalApiValuepath),
-			label: objGet(item, externalApiLabelpath)
+			label: externalApiCategorieLabelPath
+				? `${objGet(item, externalApiCategorieLabelPath)} - ${objGet(item, externalApiLabelpath)}`
+				: objGet(item, externalApiLabelpath)
 		}));
 
 		return mappedData;
@@ -87,11 +95,18 @@ export const ExternalApiSearch = ({
 		</Flex>
 	);
 };
-function mapSelectItem(value?: string): IReactSelectValue | null {
-	return value
+function mapSelectItem(value?: IInternalLink): IReactSelectValue | null {
+	return value && value.externalLabel && value.externalApiValue
 		? {
-				value: value,
-				label: value
+				value: value.externalApiValue,
+				label: value.externalLabel
 		  }
 		: null;
+}
+
+function checkData(externalItems: ExternalApiResult) {
+	if (externalItems.data.data) {
+		return externalItems.data.data;
+	}
+	return externalItems.data;
 }

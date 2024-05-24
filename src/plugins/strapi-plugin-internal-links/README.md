@@ -75,7 +75,8 @@ Add the custom field with the content-type builder or directly to the JSON.
     "enabled": boolean,
     "apiUrl": string,
     "labelPath": string,
-    "valuePath": string
+    "valuePath": string,
+		"categoryPath": string || null
 	},
 }
 // ...

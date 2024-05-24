@@ -11,6 +11,7 @@ export interface IInternalLink {
 	sourceFieldName: string;
 	targetContentTypeUid?: string;
 	targetContentTypeId: string | number | null;
+	externalLabel?: string;
 	url: string;
 	text: string;
 	type: (typeof INTERNAL_LINK_TYPE)[keyof typeof INTERNAL_LINK_TYPE];
@@ -36,7 +37,9 @@ export const createInternalLink = (
 	text: initialText || '',
 	type: INTERNAL_LINK_TYPE.INTERNAL,
 	domain: '',
-	urlAddition: ''
+	urlAddition: '',
+	externalLabel: '',
+	externalApiValue: ''
 });
 
 export default createInternalLink;
