@@ -76,7 +76,7 @@ Add the custom field with the content-type builder or directly to the JSON.
     "apiUrl": string,
     "labelPath": string,
     "valuePath": string,
-		"categoryPath": string || null
+		"labelAdditionPath": string || null // adds a addational label to the label. it will be divided by a - for example: additional label - label
 	},
 }
 // ...

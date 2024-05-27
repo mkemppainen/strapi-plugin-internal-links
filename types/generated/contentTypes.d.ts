@@ -400,6 +400,7 @@ export interface PluginInternalLinksInternalLink extends Schema.CollectionType {
 		type: Attribute.String;
 		urlAddition: Attribute.String;
 		externalApiValue: Attribute.String;
+		externalApiLabel: Attribute.String;
 		createdAt: Attribute.DateTime;
 		updatedAt: Attribute.DateTime;
 		createdBy: Attribute.Relation<'plugin::internal-links.internal-link', 'oneToOne', 'admin::user'> &
@@ -642,7 +643,18 @@ export interface ApiPagePage extends Schema.CollectionType {
 				};
 			}>;
 		link: Attribute.JSON &
-			Attribute.CustomField<'plugin::internal-links.internal-link'> &
+			Attribute.CustomField<
+				'plugin::internal-links.internal-link',
+				{
+					externalApi: {
+						enabled: true;
+						apiUrl: 'https://adviesboom.test.juridischloket-dev.nl/api/steps?filter.isStartPoint=true&searchBy=question&searchBy=answer&search=';
+						labelPath: 'question';
+						valuePath: 'question';
+						categoryPath: 'questionaire.title';
+					};
+				}
+			> &
 			Attribute.SetPluginOptions<{
 				i18n: {
 					localized: true;

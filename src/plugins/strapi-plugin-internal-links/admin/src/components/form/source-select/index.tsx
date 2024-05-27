@@ -14,19 +14,24 @@ const SEARCH_DEBOUNCE_MS = 150;
 interface Props {
 	selectedValue?: IInternalLink;
 	externalApiUrl: string;
-	externalApiLabelpath?: string;
-	externalApiValuepath?: string;
-	externalApiCategorieLabelPath?: string;
+	externalApiLabelPath?: string;
+	externalApiValuePath?: string;
+	externalApiCategoryLabelPath?: string;
 	onChange: (item?: Record<string, any>) => void;
+}
+
+export interface PageReactSelectValue extends Omit<IReactSelectValue, 'initialSelected'> {
+	subTitle?: string;
+	externalLabel?: string;
 }
 
 export const ExternalApiSearch = ({
 	onChange,
 	selectedValue,
 	externalApiUrl,
-	externalApiLabelpath,
-	externalApiValuepath,
-	externalApiCategorieLabelPath
+	externalApiLabelPath,
+	externalApiValuePath,
+	externalApiCategoryLabelPath
 }: Props) => {
 	const { formatMessage } = useIntl();
 	const fetchClient = useFetchClient();
@@ -38,7 +43,7 @@ export const ExternalApiSearch = ({
 		}
 
 		const externalItems = await fetchSource({ fetchClient, externalApiUrl, inputValue });
-		if (!externalItems || !externalApiLabelpath || !externalApiValuepath) {
+		if (!externalItems || !externalApiLabelPath || !externalApiValuePath) {
 			return [];
 		}
 
@@ -46,10 +51,10 @@ export const ExternalApiSearch = ({
 		const data = checkData(externalItems);
 
 		const mappedData = data.map((item: Record<string, any>) => ({
-			value: objGet(item, externalApiValuepath),
-			label: externalApiCategorieLabelPath
-				? `${objGet(item, externalApiCategorieLabelPath)} - ${objGet(item, externalApiLabelpath)}`
-				: objGet(item, externalApiLabelpath)
+			value: objGet(item, externalApiValuePath),
+			label: externalApiCategoryLabelPath
+				? `${objGet(item, externalApiCategoryLabelPath)} - ${objGet(item, externalApiLabelPath)}`
+				: objGet(item, externalApiLabelPath)
 		}));
 
 		return mappedData;
@@ -95,11 +100,12 @@ export const ExternalApiSearch = ({
 		</Flex>
 	);
 };
+
 function mapSelectItem(value?: IInternalLink): IReactSelectValue | null {
-	return value && value.externalLabel && value.externalApiValue
+	return value?.externalApiLabel && value?.externalApiValue
 		? {
 				value: value.externalApiValue,
-				label: value.externalLabel
+				label: value.externalApiLabel
 		  }
 		: null;
 }

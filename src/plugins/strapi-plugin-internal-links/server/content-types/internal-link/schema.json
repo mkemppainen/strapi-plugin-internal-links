@@ -50,6 +50,9 @@
 		},
 		"externalApiValue": {
 			"type": "string"
+		},
+		"externalApiLabel": {
+			"type": "string"
 		}
 	}
 }
