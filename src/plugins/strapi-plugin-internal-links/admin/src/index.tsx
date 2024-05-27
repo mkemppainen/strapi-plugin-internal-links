@@ -134,6 +134,19 @@ export default {
 								},
 								type: 'text',
 								defaultValue: ''
+							},
+							{
+								intlLabel: {
+									id: getTrad('internal-link.options.source.additionalLabel.mapping'),
+									defaultMessage: 'Optional additional label to map from API'
+								},
+								name: 'options.externalApi.labelAdditionPath',
+								description: {
+									id: getTrad('internal-link.options.source.value.additionalLabel.description'),
+									defaultMessage: 'Select the additional label to be mapped from the API'
+								},
+								type: 'text',
+								defaultValue: ''
 							}
 						]
 					}

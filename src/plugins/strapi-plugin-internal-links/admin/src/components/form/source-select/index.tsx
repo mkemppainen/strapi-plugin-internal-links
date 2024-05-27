@@ -6,24 +6,32 @@ import { Flex, FieldLabel } from '@strapi/design-system';
 import { Combobox, IReactSelectValue } from '../../Combobox';
 import getTrad from '../../../utils/get-trad';
 import { Label } from '../../label';
-import { fetchSource } from '../../../api/fetch-source';
+import { ExternalApiResult, fetchSource } from '../../../api/fetch-source';
+import { IInternalLink } from '../../factory';
 
 const SEARCH_DEBOUNCE_MS = 150;
 
 interface Props {
-	selectedValue?: string;
+	selectedValue?: IInternalLink;
 	externalApiUrl: string;
-	externalApiLabelpath?: string;
-	externalApiValuepath?: string;
+	externalApiLabelPath?: string;
+	externalApiValuePath?: string;
+	externalApiLabelAdditionPath?: string;
 	onChange: (item?: Record<string, any>) => void;
+}
+
+export interface PageReactSelectValue extends Omit<IReactSelectValue, 'initialSelected'> {
+	subTitle?: string;
+	externalLabel?: string;
 }
 
 export const ExternalApiSearch = ({
 	onChange,
 	selectedValue,
 	externalApiUrl,
-	externalApiLabelpath,
-	externalApiValuepath
+	externalApiLabelPath,
+	externalApiValuePath,
+	externalApiLabelAdditionPath
 }: Props) => {
 	const { formatMessage } = useIntl();
 	const fetchClient = useFetchClient();
@@ -35,13 +43,18 @@ export const ExternalApiSearch = ({
 		}
 
 		const externalItems = await fetchSource({ fetchClient, externalApiUrl, inputValue });
-		if (!externalItems || !externalApiLabelpath || !externalApiValuepath) {
+		if (!externalItems || !externalApiLabelPath || !externalApiValuePath) {
 			return [];
 		}
 
-		const mappedData = externalItems.data.map((item: Record<string, any>) => ({
-			value: objGet(item, externalApiValuepath),
-			label: objGet(item, externalApiLabelpath)
+		// fetch gives data back, but some apis gives also data back so you get data.data
+		const data = checkData(externalItems);
+
+		const mappedData = data.map((item: Record<string, any>) => ({
+			value: objGet(item, externalApiValuePath),
+			label: externalApiLabelAdditionPath
+				? `${objGet(item, externalApiLabelAdditionPath)} - ${objGet(item, externalApiLabelPath)}`
+				: objGet(item, externalApiLabelPath)
 		}));
 
 		return mappedData;
@@ -87,11 +100,19 @@ export const ExternalApiSearch = ({
 		</Flex>
 	);
 };
-function mapSelectItem(value?: string): IReactSelectValue | null {
-	return value
+
+function mapSelectItem(value?: IInternalLink): IReactSelectValue | null {
+	return value?.externalApiLabel && value?.externalApiValue
 		? {
-				value: value,
-				label: value
+				value: value.externalApiValue,
+				label: value.externalApiLabel
 		  }
 		: null;
+}
+
+function checkData(externalItems: ExternalApiResult) {
+	if (externalItems.data.data) {
+		return externalItems.data.data;
+	}
+	return externalItems.data;
 }

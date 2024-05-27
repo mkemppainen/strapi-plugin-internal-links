@@ -88,6 +88,7 @@ const InternalLinkForm = ({
 		setLink((previousValue) => ({
 			...previousValue,
 			externalApiValue: props ? props.value : '',
+			externalApiLabel: props ? props.label : '',
 			url: props.value
 		}));
 	};

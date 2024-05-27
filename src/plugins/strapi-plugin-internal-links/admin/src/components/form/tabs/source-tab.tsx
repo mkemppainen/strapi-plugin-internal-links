@@ -59,10 +59,11 @@ export const SourceTab = ({
 
 					{attributeOptions?.externalApi?.apiUrl && (
 						<ExternalApiSearch
-							externalApiValuepath={attributeOptions?.externalApi?.valuePath}
-							externalApiLabelpath={attributeOptions?.externalApi?.labelPath}
+							externalApiValuePath={attributeOptions?.externalApi?.valuePath}
+							externalApiLabelPath={attributeOptions?.externalApi?.labelPath}
 							externalApiUrl={attributeOptions?.externalApi?.apiUrl}
-							selectedValue={link.externalApiValue}
+							externalApiLabelAdditionPath={attributeOptions?.externalApi?.labelAdditionPath}
+							selectedValue={link}
 							onChange={(value) => onSourceChange({ value: value?.value, label: value?.label })}
 						/>
 					)}

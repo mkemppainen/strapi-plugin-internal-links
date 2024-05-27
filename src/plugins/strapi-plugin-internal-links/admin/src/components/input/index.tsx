@@ -37,6 +37,7 @@ export interface IInternalLinkAttribute {
 			enabled?: boolean;
 			labelPath?: string;
 			valuePath?: string;
+			labelAdditionPath?: string;
 			apiUrl?: string;
 		};
 		pageSearchOptions?: {
