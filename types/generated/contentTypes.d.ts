@@ -651,7 +651,7 @@ export interface ApiPagePage extends Schema.CollectionType {
 						apiUrl: 'https://adviesboom.test.juridischloket-dev.nl/api/steps?filter.isStartPoint=true&searchBy=question&searchBy=answer&search=';
 						labelPath: 'question';
 						valuePath: 'question';
-						categoryPath: 'questionaire.title';
+						labelAdditionPath: 'questionaire.title';
 					};
 				}
 			> &
