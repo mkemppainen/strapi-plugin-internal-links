@@ -16,7 +16,7 @@ interface Props {
 	externalApiUrl: string;
 	externalApiLabelPath?: string;
 	externalApiValuePath?: string;
-	externalApiCategoryLabelPath?: string;
+	externalApiLabelAdditionPath?: string;
 	onChange: (item?: Record<string, any>) => void;
 }
 
@@ -31,7 +31,7 @@ export const ExternalApiSearch = ({
 	externalApiUrl,
 	externalApiLabelPath,
 	externalApiValuePath,
-	externalApiCategoryLabelPath
+	externalApiLabelAdditionPath
 }: Props) => {
 	const { formatMessage } = useIntl();
 	const fetchClient = useFetchClient();
@@ -52,8 +52,8 @@ export const ExternalApiSearch = ({
 
 		const mappedData = data.map((item: Record<string, any>) => ({
 			value: objGet(item, externalApiValuePath),
-			label: externalApiCategoryLabelPath
-				? `${objGet(item, externalApiCategoryLabelPath)} - ${objGet(item, externalApiLabelPath)}`
+			label: externalApiLabelAdditionPath
+				? `${objGet(item, externalApiLabelAdditionPath)} - ${objGet(item, externalApiLabelPath)}`
 				: objGet(item, externalApiLabelPath)
 		}));
 

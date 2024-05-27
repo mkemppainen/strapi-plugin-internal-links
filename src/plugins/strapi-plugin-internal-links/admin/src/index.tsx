@@ -137,13 +137,13 @@ export default {
 							},
 							{
 								intlLabel: {
-									id: getTrad('internal-link.options.source.category.mapping'),
-									defaultMessage: 'Optional Category to map from API'
+									id: getTrad('internal-link.options.source.additionalLabel.mapping'),
+									defaultMessage: 'Optional additional label to map from API'
 								},
-								name: 'options.externalApi.categoryPath',
+								name: 'options.externalApi.labelAdditionPath',
 								description: {
-									id: getTrad('internal-link.options.source.value.category.description'),
-									defaultMessage: 'Select the category to be mapped from the API'
+									id: getTrad('internal-link.options.source.value.additionalLabel.description'),
+									defaultMessage: 'Select the additional label to be mapped from the API'
 								},
 								type: 'text',
 								defaultValue: ''
