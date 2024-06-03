@@ -98,6 +98,19 @@ export default {
 							},
 							{
 								intlLabel: {
+									id: getTrad('internal-link.options.externalApi.tabName'),
+									defaultMessage: 'Set tab name for external API source'
+								},
+								name: 'options.externalApi.tabName',
+								description: {
+									id: getTrad('internal-link.options.externalApi.enable.tabName'),
+									defaultMessage: '(Optional) Set tab name for external API source'
+								},
+								type: 'text',
+								defaultValue: ''
+							},
+							{
+								intlLabel: {
 									id: getTrad('internal-link.options.source.options'),
 									defaultMessage: 'External API Source'
 								},
