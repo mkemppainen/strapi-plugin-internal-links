@@ -288,9 +288,10 @@ const InternalLinkForm = ({
 					</Tab>
 					{externalApi && (
 						<Tab>
-							{formatMessage({
-								id: getTrad('internal-link.tab.source.label')
-							})}
+							{attributeOptions?.externalApi?.tabName ||
+								formatMessage({
+									id: getTrad('internal-link.tab.source.label')
+								})}
 						</Tab>
 					)}
 				</Tabs>

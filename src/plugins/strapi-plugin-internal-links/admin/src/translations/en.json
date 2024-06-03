@@ -23,6 +23,8 @@
 	"internal-link.options.base.noTitle.description": "Enable this to hide the link text field",
 	"internal-link.options.externalApi.enable": "Enable External API source",
 	"internal-link.options.externalApi.enable.description": "Enable this to connect with an external API",
+	"internal-link.options.externalApi.tabName": "Set tab name for external API source",
+	"internal-link.options.externalApi.enable.tabName": "(Optional) Set tab name for external API source",
 	"internal-link.options.source.apiUrl.error": "Setup a Valid url in de internal link settings",
 	"internal-link.modal.title": "Add link",
 	"internal-link.modal.buttons.cancel": "Cancel",
