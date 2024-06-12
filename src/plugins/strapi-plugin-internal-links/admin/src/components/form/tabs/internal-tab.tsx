@@ -104,7 +104,7 @@ export const InternalTab = ({
 								menuPosition="absolute"
 								menuPlacement="auto"
 								// @ts-ignore Option is of correct type
-								components={{ Option }}
+								// components={{ Option }}
 								options={platformOptionsIsFetching ? [] : platformOptions}
 								isLoading={platformOptionsIsLoading}
 								isDisabled={!contentType || platformOptionsIsLoading}

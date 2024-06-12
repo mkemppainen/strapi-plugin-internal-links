@@ -442,9 +442,9 @@ const hasSlugChanged = async (event: Record<string, any>): Promise<boolean> => {
 		return event?.params?.data?.state?.updatedPath;
 	}
 
-	if (!pageBuilderEnabled) {
-		return false;
-	}
+	// if (!pageBuilderEnabled) {
+	// 	return false;
+	// }
 
 	const originalEntity = await strapi.entityService?.findOne(contentTypeUID, data.id || where.id, {
 		populate: { parent: true }
