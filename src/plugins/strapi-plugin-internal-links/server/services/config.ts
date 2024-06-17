@@ -27,7 +27,7 @@ const getGlobalConfig = () => {
 	return isEmpty(config) ? null : config;
 };
 const getContentTypeConfig = (uid: Common.UID.ContentType) => {
-	const config = strapi.contentType(uid).attributes.internal_link?.['options']?.['slug'];
+  const config = strapi.contentType(uid).pluginOptions?.['internal-links'];
 	return isEmpty(config) ? null : config;
 };
 
