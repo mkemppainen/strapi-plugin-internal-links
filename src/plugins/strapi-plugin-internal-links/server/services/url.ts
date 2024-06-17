@@ -32,7 +32,7 @@ const constructURL = (uid: string, entity: Record<string, any>): string => {
 const getSlug = (uid: string, entity: Record<string, any>) => {
 	const globalConfig = strapi.service('plugin::internal-links.config').getGlobalConfig();
 	const entityConfig = strapi.service('plugin::internal-links.config').getContentTypeConfig(uid);
-	const slugField = entityConfig?.slug ?? 'fullPath';
+	const slugField = entityConfig?.slug ?? 'slug';
 	const slug = get(entity, slugField, null);
 
 	return trim(slug, '/') ?? globalConfig?.notFoundSlug ?? '404';
